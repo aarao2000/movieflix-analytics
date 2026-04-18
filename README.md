@@ -1,6 +1,6 @@
 # MovieFlix Analytics
 
-MovieFlix Analytics é um projeto de exemplo que une uma aplicação web simples de cadastro e avaliação de filmes com um fluxo de dados analítico.
+MovieFlix Analytics é um projeto de exemplo que une uma aplicação web simples de avaliação de filmes com um fluxo de dados analítico.
 
 ## Arquitetura
 
@@ -41,7 +41,7 @@ MovieFlix Analytics é um projeto de exemplo que une uma aplicação web simples
 ## Dados e visões
 
 - Data Lake: `data_lake/movies.csv`, `data_lake/users.csv`, `data_lake/ratings.csv`
-- Data Warehouse: tabelas `movies`, `users`, `ratings` (o carregamento enriquece `users` com país e idade sintéticos para análise)
+- Data Warehouse: tabelas `movies`, `users`, `ratings`
 - Data Mart: views `top_10_rated_by_genre`, `avg_score_by_age_group`, `ratings_by_country`
 
 ## Consultas analíticas
