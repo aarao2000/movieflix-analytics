@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>MovieFlix Analytics</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 24px; background: #f4f4f8; color: #222; }
+      .container { max-width: 960px; margin: 0 auto; }
+      h1 { margin-bottom: 18px; }
+      form { background: #fff; border-radius: 10px; padding: 16px; margin-bottom: 24px; box-shadow: 0 0 10px rgba(0,0,0,.05);} 
+      input, select, textarea { width: 100%; padding: 8px; margin: 6px 0 14px; border: 1px solid #ccc; border-radius: 6px; }
+      button { background: #0f62fe; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; }
+      button:hover { opacity: .95; }
+      table { width: 100%; border-collapse: collapse; background: white; }
+      th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+      th { background: #f7f9fc; }
+      .small { font-size: .9em; color: #555; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>MovieFlix Analytics</h1>
+      <p class="small">Cadastre filmes e registre avaliações para gerar dados analíticos.</p>
+
+      <form method="post" action="/movies">
+        <h2>Adicionar filme</h2>
+        <input type="text" name="title" placeholder="Título" required />
+        <input type="text" name="genre" placeholder="Gênero" required />
+        <input type="number" name="year" placeholder="Ano" />
+        <textarea name="description" placeholder="Descrição" rows="3"></textarea>
+        <button type="submit">Salvar filme</button>
+      </form>
+
+      <form method="post" action="/ratings">
+        <h2>Avaliar filme</h2>
+        <select name="movie_id" required>
+          <option value="">Selecione um filme</option>
+          {% for movie in movies %}
+          <option value="{{ movie.id }}">{{ movie.title }} ({{ movie.genre }})</option>
+          {% endfor %}
+        </select>
+        <input type="number" name="score" min="1" max="10" placeholder="Nota 1-10" required />
+        <textarea name="comment" placeholder="Comentário" rows="2"></textarea>
+        <button type="submit">Enviar avaliação</button>
+      </form>
+
+      <h2>Filmes cadastrados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Gênero</th>
+            <th>Ano</th>
+            <th>Nota média</th>
+            <th>Avaliações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for movie in movies %}
+          <tr>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.genre }}</td>
+            <td>{{ movie.year or '-' }}</td>
+            <td>{{ movie.average_score or '-' }}</td>
+            <td>{{ movie.ratings|length }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5">Nenhum filme cadastrado ainda.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+MovieFlix Analytics - Guia rápido
+
+Este guia mostra como rodar o projeto MovieFlix Analytics passo a passo.
+Todos os comandos são diretamente executáveis em um terminal Linux.
+
+1) Instalar ferramentas necessárias
+- Docker
+- Docker Compose
+- Git
+- Python 3 (apenas para ler o código localmente)
+
+2) Baixar o projeto
+Substitua <URL-do-repositorio> pelo endereço do seu repositório.
+
+  git clone <URL-do-repositorio> movieflix-analytics
+  cd movieflix-analytics
+
+3) Subir a aplicação e o banco de dados
+Este comando cria e inicia os containers necessários (app, Nginx e PostgreSQL):
+
+  docker compose up --build -d
+
+4) Verificar se os serviços estão ativos
+
+  docker compose ps
+
+5) Acessar a aplicação
+Abra no navegador:
+
+  http://localhost:8080
+
+6) Carregar os dados brutos para o banco de dados
+Os arquivos CSV estão em `data_lake/`.
+Este comando executa o script ETL que importa os dados para o PostgreSQL:
+
+  docker compose exec app python etl/load_data.py
+
+7) Consultar o banco de dados PostgreSQL
+Esta consulta mostra as visões do Data Mart criadas no projeto:
+
+  docker compose exec db psql -U movieflix -d movieflix_dw -c "SELECT * FROM top_10_rated_by_genre LIMIT 5;"
+
+8) Verificar logs de inicialização
+
+  docker compose logs --tail=20
+
+9) Parar o projeto
+
+  docker compose down
+
+Observações simples:
+- `docker compose up --build -d` inicia tudo em segundo plano.
+- `docker compose exec` executa comandos dentro de um container já em execução.
+- Se o navegador não abrir, verifique se o endereço é `http://localhost:8080`.
+
+Pronto. Esses passos permitem a qualquer pessoa reproduzir o projeto sem precisar de conhecimento técnico intermediário.

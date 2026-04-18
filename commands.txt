@@ -1,0 +1,11 @@
+git clone <URL-do-repositorio> movieflix-analytics
+cd movieflix-analytics
+docker compose up --build -d
+docker compose ps
+docker compose logs --tail=20
+docker compose exec app python etl/load_data.py
+docker compose exec app python -m py_compile app/app.py etl/load_data.py
+docker compose exec db psql -U movieflix -d movieflix_dw -c "SELECT * FROM top_10_rated_by_genre LIMIT 5;"
+docker compose exec db psql -U movieflix -d movieflix_dw -c "SELECT * FROM avg_score_by_age_group;"
+docker compose exec db psql -U movieflix -d movieflix_dw -c "SELECT * FROM ratings_by_country;"
+docker compose down
