@@ -1,12 +1,21 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import psycopg2
 
 app = Flask(__name__, template_folder="templates")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///movieflix.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
+DB_PARAMS = {
+    'host': os.getenv('PGHOST', 'db'),
+    'port': os.getenv('PGPORT', '5432'),
+    'dbname': os.getenv('PGDATABASE', 'movieflix_dw'),
+    'user': os.getenv('PGUSER', 'movieflix'),
+    'password': os.getenv('PGPASSWORD', 'movieflix'),
+}
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,6 +67,20 @@ def create_rating():
         db.session.add(rating)
         db.session.commit()
     return redirect(url_for("index"))
+
+@app.route("/analytics")
+def analytics():
+    try:
+        conn = psycopg2.connect(**DB_PARAMS)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM top_10_rated_by_genre")
+        top10 = cur.fetchall()
+        cur.execute("SELECT * FROM avg_score_by_age_group")
+        avg_age = cur.fetchall()
+        conn.close()
+        return render_template("analytics.html", top10=top10, avg_age=avg_age)
+    except Exception as e:
+        return f"Error connecting to database: {e}"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

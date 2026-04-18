@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>MovieFlix Analytics</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 24px; background: #f4f4f8; color: #222; }
+      .container { max-width: 1200px; margin: 0 auto; }
+      h1 { margin-bottom: 18px; }
+      h2 { margin-top: 32px; margin-bottom: 12px; }
+      table { width: 100%; border-collapse: collapse; background: white; margin-bottom: 24px; }
+      th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+      th { background: #f7f9fc; }
+      .back { margin-bottom: 24px; }
+      .back a { color: #0f62fe; text-decoration: none; }
+      .back a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="back">
+        <a href="/">← Voltar para a página principal</a>
+      </div>
+      <h1>MovieFlix Analytics</h1>
+      <p class="small">Análises baseadas nos dados do Data Warehouse.</p>
+
+      <h2>Top 10 Filmes Mais Bem Avaliados por Gênero</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Gênero</th>
+            <th>Título</th>
+            <th>Nota Média</th>
+            <th>Número de Avaliações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in top10 %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ "%.2f"|format(row[2]) }}</td>
+            <td>{{ row[3] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2>Nota Média por Faixa Etária</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Faixa Etária</th>
+            <th>Nota Média</th>
+            <th>Número de Avaliações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in avg_age %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ "%.2f"|format(row[1]) }}</td>
+            <td>{{ row[2] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
