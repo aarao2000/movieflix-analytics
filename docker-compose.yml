@@ -9,6 +9,7 @@ services:
     volumes:
       - ./app:/app
       - /home/andre/Downloads:/downloads
+      - ./etl:/app/etl
     depends_on:
       - db
     networks:
