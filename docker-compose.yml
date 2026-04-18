@@ -8,6 +8,7 @@ services:
       - '5000'
     volumes:
       - ./app:/app
+      - /home/andre/Downloads:/downloads
     depends_on:
       - db
     networks:

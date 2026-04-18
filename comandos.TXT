@@ -1,0 +1,27 @@
+# Comandos Utilizados no Projeto MovieFlix Analytics
+
+## 1. Construção e Teste Inicial da Aplicação
+# Comando usado para configurar o Docker Compose e construir a imagem da aplicação
+cd ~/movieflix-analytics && docker compose config > /tmp/movieflix-compose-config.txt && docker build -t movieflix-app-test app
+
+# Tentativa inicial de subir os containers em modo detached
+cd ~/movieflix-analytics && docker compose up --build -d && sleep 8 && curl --silent --fail http://127.0.0.1:8080/ | head -20
+
+## 2. Resolução de Conflito de Porta PostgreSQL
+# Parar container PostgreSQL conflitante e subir a stack novamente
+docker stop mypostgres && cd ~/movieflix-analytics && docker compose up --build -d && sleep 8 && curl --silent --fail http://127.0.0.1:8080/ | head -20
+
+## 3. Operações Git e Push para GitHub
+# Adicionar remote origin e tentar push (falhou inicialmente por repositório não existir)
+cd ~/movieflix-analytics && git remote add origin https://github.com/aarao2000/movieflix-analytics.git && git push -u origin main
+
+# Push final após criação do repositório
+cd ~/movieflix-analytics && git push -u origin main
+
+## 4. Correção de Problema no Nginx (502 Bad Gateway)
+# Reiniciar nginx para resolver upstream stale
+cd ~/movieflix-analytics && docker compose restart nginx && sleep 2 && curl -v --silent --fail http://127.0.0.1:8080/ | head -20
+
+## 5. Push Final para GitHub e Docker Hub
+# Resetar mudança irrelevante, verificar status e push para GitHub, taggear e push imagem Docker
+cd ~/movieflix-analytics && git checkout -- etl/load_data.py && git status --short --branch && git push origin main && docker tag movieflix-analytics-app:latest aarao2000/movieflix-analytics-app:latest && docker push aarao2000/movieflix-analytics-app:latest

@@ -3,7 +3,7 @@ import os
 import psycopg2
 from psycopg2.extras import execute_values
 
-DATA_LAKE_DIR = os.path.join(os.path.dirname(__file__), '..', 'data_lake')
+DATA_LAKE_DIR = '/downloads'
 DB_PARAMS = {
     'host': os.getenv('PGHOST', 'db'),
     'port': os.getenv('PGPORT', '5432'),
