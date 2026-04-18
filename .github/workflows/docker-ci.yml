@@ -1,5 +1,7 @@
 name: Docker CI
 
+# CI/CD pipeline for MovieFlix Analytics
+
 on:
   push:
     branches: [ main, master ]
